@@ -24,29 +24,28 @@
 (define distance
   (lambda (word-pair)
     (list (word-distance
-            (string->list (car word-pair))
-            (string->list (cadr word-pair)))
+            (string->list (first word-pair))
+            (string->list (second word-pair)))
           word-pair)))
 
-
 (define distances (map distance paired-words))
-(define filtered-list
-  (filter (lambda (l) (= (car l) 1)) distances))
+
+(define box-id-pair
+  (cadar (filter (lambda (l) (= (car l) 1)) distances)))
 
 (define get-common-chars
   (lambda (w1 w2)
     (if (empty? w1)
       '()
-      (let ([c1 (car w1)]
-            [c2 (car w2)])
-        (if (eq? c1 c2)
-          (cons c1 (get-common-chars (cdr w1) (cdr w2)))
-          (get-common-chars (cdr w1) (cdr w2)))))))
+      (let ([h1 (first w1)]
+            [h2 (first w2)]
+            [next-common (get-common-chars (rest w1) (rest w2))])
+        (if (eq? h1 h2)
+          (cons h1 next-common)
+          next-common)))))
 
 (define construct-word
-  (lambda (word-pair)
-    (let ([w1 (car word-pair)]
-          [w2 (cadr word-pair)])
-      (list->string (get-common-chars (string->list w1) (string->list w2))))))
+  (lambda (w1 w2)
+    (list->string (get-common-chars (string->list w1) (string->list w2)))))
 
-(println (construct-word (cadar filtered-list)))
+(println (construct-word (first box-id-pair) (second box-id-pair)))
