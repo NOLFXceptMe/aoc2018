@@ -5,7 +5,7 @@
 (define encode-char
   (lambda (char)
     (let ([index (- (char->integer char) (char->integer #\a))])
-      (arithmetic-shift 1 (* 2 index)))))
+      (arithmetic-shift 1 (* 3 index)))))
 
 (define encode-word
   (lambda (word)
@@ -20,12 +20,13 @@
   (lambda (number index)
     (bitwise-and
       number
-      (+ (arithmetic-shift 1 (* 2 index))
-         (arithmetic-shift 1 (+ 1 (* 2 index)))))))
+      (+ (arithmetic-shift 1 (* 3 index))
+         (arithmetic-shift 1 (+ 1 (* 3 index)))
+         (arithmetic-shift 1 (+ 2 (* 3 index)))))))
 
 (define reduce
   (lambda (number index)
-    (arithmetic-shift number (* -2 index))))
+    (arithmetic-shift number (* -3 index))))
 
 (define has-at-i?
   (lambda (encoded-word number)
